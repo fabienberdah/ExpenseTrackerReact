@@ -1,12 +1,7 @@
 import React, { createContext, useReducer } from "react";
 import AppReducer from "./AppReducer";
 const initialState = {
-  transactions: [
-    { id: 1, text: "Flower", amount: -20 },
-    { id: 2, text: "Salary", amount: 300 },
-    { id: 3, text: "Book", amount: -10 },
-    { id: 4, text: "Camera", amount: 150 },
-  ],
+  transactions: [],
 };
 
 //Create context... This will hold our global State for our transactions. If we were dealing with a larger application that needs to keep track of various states for various components, we would create various contexts and import them into this one which is global.
@@ -17,8 +12,32 @@ export const GlobalContext = createContext(initialState);
 export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AppReducer, initialState);
 
+  //delete a transaction
+  function deleteTransaction(id) {
+    // the function will dispatch an action object to the reducer specified abobe in (const [state, dispatch] = useReducer(AppReducer, initialState);)
+    dispatch({
+      //Convention wants it that the type be written in capital letters with words separated by an underscore
+      type: "DELETE_TRANSACTION",
+      payload: id,
+    });
+  }
+
+  // add a transaction
+  function addTransaction(transaction) {
+    dispatch({
+      type: "ADD_TRANSACTION",
+      payload: transaction,
+    });
+  }
+
   return (
-    <GlobalContext.Provider value={{ transactions: state.transactions }}>
+    <GlobalContext.Provider
+      value={{
+        transactions: state.transactions,
+        deleteTransaction,
+        addTransaction,
+      }}
+    >
       {children}
     </GlobalContext.Provider>
   );

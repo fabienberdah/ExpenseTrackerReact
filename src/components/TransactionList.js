@@ -5,14 +5,8 @@ import Transaction from "./Transaction";
 const TransactionList = () => {
   const { transactions } = useContext(GlobalContext);
 
-  const renderTransactions = transactions.map((transaction) => {
-    return (
-      <Transaction
-        key={transaction.id}
-        text={transaction.text}
-        amount={transaction.amount}
-      />
-    );
+  const renderTransactions = transactions.map(({ id, text, amount }) => {
+    return <Transaction key={id} text={text} amount={amount} id={id} />;
   });
 
   return (
